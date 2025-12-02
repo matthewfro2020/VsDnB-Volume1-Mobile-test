@@ -25,7 +25,7 @@ jobs:
           haxelib install hscript
           haxelib install json2object
           haxelib install flxanimate
-          haxelib git polymod https://github.com/growtopiaguru/polymod-ios-patch.git
+          haxelib git polymod https://github.com/T5mpler/polymod-dnb
 
       - name: Fix hxcpp config
         run: |
