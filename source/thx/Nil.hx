@@ -1,9 +1,11 @@
 package thx;
 
-// Fake minimal Nil that does NOT conflict with Obj-C "Nil"
-@:keep
-class Nil {
-    public static final nil = new Nil();
-    public function new() {}
-    public function toString() return "nil";
+/**
+	A runtime value that describes the absence of a value.
+**/
+enum Nil {
+	/**
+		`nil` is the only value available for `Nil` and it is a constant value.
+	**/
+	nil;
 }
