@@ -353,11 +353,5 @@ class PolymodManager
         Polymod.addDefaultImport(util.tools.IteratorTools);
         Polymod.addDefaultImport(util.tools.Preloader);
         Polymod.addDefaultImport(util.tools.converters.SongConverter);
-        
-        // Import all abstract classes.
-        for (alias => cls in polymod.hscript._internal.PolymodScriptClass.abstractClassImpls)
-        {
-            Polymod.addDefaultImport(cls, alias);
-        }
     }
 }
