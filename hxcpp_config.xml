@@ -1,0 +1,7 @@
+<xml>
+  <section id="vars">
+    <set name="HXCPP_CPP11" value="1"/>
+    <set name="HXCPP_NO_RTTI" value="1"/>
+    <set name="HXCPP_CLANG" value="1"/>
+  </section>
+</xml>
