@@ -55,13 +55,6 @@ jobs:
           haxelib install hmm
           haxelib run hmm install
 
-      - name: Remove thx (fix iOS Nil conflict)
-        run: |
-          haxelib remove thx.core    || true
-          haxelib remove thx.semver  || true
-          haxelib remove thx.error   || true
-          haxelib remove thx.languages || true
-  
       - name: Configure Android
         run: |
           haxelib run lime config ANDROID_SDK $ANDROID_SDK_ROOT
