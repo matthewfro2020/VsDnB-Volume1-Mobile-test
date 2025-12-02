@@ -29,11 +29,6 @@ class PolymodInterpEx extends Interp {
 
     public function new() {
         super();
-
-        // Android/iOS crash fix → avoid Reflect on private Interp state
-        #if (android || ios)
-        this.allowRecursion = false;
-        #end
     }
 
     /** Expression override with safe depth + tracking */
