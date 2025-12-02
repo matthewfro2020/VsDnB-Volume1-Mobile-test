@@ -48,7 +48,7 @@ jobs:
           haxelib install hscript
           haxelib install hxvlc
           haxelib install thx.core
-          haxelib git polymod https://github.com/growtopiaguru/polymod-ios-patch
+          haxelib git polymod https://github.com/T5mpler/polymod-dnb
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
           haxelib install hmm
           haxelib run hmm install
