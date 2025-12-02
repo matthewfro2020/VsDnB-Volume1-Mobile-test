@@ -117,6 +117,13 @@ class Speaker extends FlxZSprite implements IDialogueScriptedClass implements IR
             this.offset.y += expression.animation.offsets[1];
         }
     }
+    
+override public function loadGraphic(graphic:Dynamic, animated:Bool = false, frameWidth:Int = 0, frameHeight:Int = 0, unique:Bool = false, key:String = null)
+{
+    super.loadGraphic(graphic, animated, frameWidth, frameHeight, unique, key);
+    this.__zIndex = this.zIndex; // restore zIndex
+    return this;
+}
 
     public function fetchData(id:String):SpeakerData
         return SpeakerRegistry.instance.parseEntryDataWithMigration(id);
