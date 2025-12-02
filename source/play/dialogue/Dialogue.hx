@@ -243,20 +243,27 @@ class Dialogue extends FlxSpriteGroup implements IDialogueScriptedClass implemen
         buildText();
     }
 
-    function buildText():Void
-    {
-        textHolder = new FlxZSprite();
-        textHolder.zIndex = 30;
-        add(textHolder);
+function buildText():Void
+{
+    // Container with zIndex support
+    var textHolder = new FlxZSprite();
+    textHolder.zIndex = 30;
+    add(textHolder);
 
-        dialogueText = new FlxTypeText(140, 425, Std.int(FlxG.width * 0.8), "", 32);
-        dialogueText.font = Paths.font("comic.ttf");
-        dialogueText.color = 0xFF000000;
-        dialogueText.antialiasing = true;
-        dialogueText.completeCallback = onTypingComplete;
+    // The text itself must NOT go directly into the group
+    dialogueText = new FlxTypeText(140, 425, Std.int(FlxG.width * 0.8), "", 32);
+    dialogueText.font = Paths.font('comic.ttf');
+    dialogueText.color = 0xFF000000;
+    dialogueText.antialiasing = true;
+    dialogueText.completeCallback = onTypingComplete;
 
-        textHolder.add(dialogueText);
-    }
+    // FIX: do NOT add dialogueText to the Dialogue group
+    // instead, add only to the FlxZSprite holder
+    textHolder.add(dialogueText);
+
+    // FIX: move zIndex to the holder ONLY
+    textHolder.zIndex = 30;
+}
 
     function beginDialogue():Void
     {
