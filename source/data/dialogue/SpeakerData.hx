@@ -6,73 +6,83 @@ import data.animation.Animation.AnimationData;
 class SpeakerData
 {
     /**
-     * Semantic version for migrations.
+     * The semantic version of this SpeakerData object.
      */
-    @:default("1.0.0")
     public var version:String;
 
     /**
-     * Readable name of the speaker.
+     * The name of this speaker.
      */
     public var name:String;
 
     /**
-     * Base position offsets for the speaker.
+     * position offsets that are applied to this speaker when they're talking.
      */
     @:default([0, 0])
     public var globalOffsets:Array<Float>;
 
     /**
-     * Dialogue sound list.
+     * A list of sound asset paths to play at random while the character is talking.
      */
-    @:default([])
     public var sounds:Array<String>;
 
     /**
-     * Expressions (idle, happy, angry, etc.)
+     * A list of all of this character's expressions as they're talking.
      */
     @:default([])
     public var expressions:Array<SpeakerExpressionData>;
 
-    public function new() {}
 
+    public function new() {}
+    
     /**
-     * Serialize into JSON.
+     * Serializes this SpeakerData object into a json string.
+     * @return A SpeakerData JSON string.
      */
     public function serialize():String
     {
-        var writer = new JsonWriter<SpeakerData>();
+        var writer:JsonWriter<SpeakerData> = new JsonWriter<SpeakerData>();
         writer.ignoreNullOptionals = true;
-        return writer.write(this, "  ");
+        return writer.write(this, '  ');
     }
 }
 
 /**
- * Data definition for an expression.
+ * A type that defines the data that goes into a speaker's expression.
  */
-typedef SpeakerExpressionData =
+typedef SpeakerExpressionData = 
 {
-    /** Name / ID of the expression */
+    /**
+     * The name/id of this expression.
+     * This is what'll be used to retrieve this data.
+     */
     public var name:String;
-
-    /** Path to PNG or atlas folder */
+    
+    /**
+     * The asset path of the expression.
+     */
     public var assetPath:String;
 
-    /** Animation data (optional) */
-    @:optional
+    /**
+     * An optional parameter allowing to make the expression animated.
+     */
     public var ?animation:AnimationData;
 
-    /** Scaling */
+    /**
+     * How much the speaker will be scaled when they're this expression.
+     */
     @:default(1)
     public var scale:Float;
 
-    /** Anti-alias toggle */
+    /**
+     * Whether this expression should have antialiasing.
+     */
     @:default(true)
-    @:optional
     public var ?antialiasing:Bool;
 
-    /** Offset applied ONLY for this expression */
+    /**
+     * Position offsets that'll be used when the speaker is on this expression.
+     */
     @:default([0, 0])
-    @:optional
     public var ?offsets:Array<Float>;
 }
