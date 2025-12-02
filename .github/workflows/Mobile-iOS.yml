@@ -11,37 +11,59 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine Version
+        id: ver
+        run: |
+          if git describe --tags --exact-match >/dev/null 2>&1; then
+            echo "version=$(git describe --tags --exact-match)" >> $GITHUB_OUTPUT
+          else
+            echo "version=dev-$(date +'%Y%m%d-%H%M')" >> $GITHUB_OUTPUT
+          fi
 
       - uses: krdlab/setup-haxe@master
-        with: { haxe-version: 4.3.6 }
+        with:
+          haxe-version: 4.3.6
 
-      - name: Install libs
+      - name: Install Haxelibs
         run: |
           haxelib install hxcpp
           haxelib install lime
           haxelib install openfl
           haxelib install flixel
-          haxelib install polymod
-          haxelib install hscript
-          haxelib install json2object
+          haxelib install flixel-ui
+          haxelib install flixel-addons
           haxelib install flxanimate
-          haxelib git polymod https://github.com/T5mpler/polymod-dnb
+          haxelib install json2object
+          haxelib git polymod https://github.com/larsiusprime/polymod
+          haxelib install hscript
+          haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
+          haxelib install hmm
+          haxelib run hmm install
 
-      - name: Fix hxcpp config
+      - name: Fix thx.core crash on iOS
         run: |
-          echo '<?xml version="1.0" encoding="utf-8"?><xml><section id="vars"><set name="HXCPP_CPP11" value="1"/><set name="HXCPP_NO_PCH" value="1"/><set name="HXCPP_NO_NIL" value="1"/><set name="HXCPP_CLANG" value="1"/></section></xml>' > ~/.hxcpp_config.xml
+          haxelib remove thx.core || true
+          haxelib remove thx.error || true
+          haxelib remove thx.languages || true
 
-      - name: Build iOS
-        run: haxelib run lime build ios -nosign -D officialBuild
+      - name: Create valid hxcpp config
+        run: |
+          cat > ~/.hxcpp_config.xml <<'EOF'<?xml version="1.0" encoding="utf-8"?><xml><section id="vars"><set name="HXCPP_CPP11" value="1"/><set name="HXCPP_CLANG" value="1"/><set name="HXCPP_NO_NIL" value="1"/><set name="HXCPP_NO_RTTI" value="1"/></section></xml>EOF
+
+      - name: Build iOS (nosign)
+        run: haxelib run lime build ios -nosign -D officialBuild -DMOBILE_BUILD -D HXCPP_CPP11
 
       - name: Package IPA
         run: |
           cd export/release/ios/build/*-iphoneos
           mkdir Payload
           mv *.app Payload/
-          zip -r ~/VsDnB.ipa Payload
+          zip -r ~/ios-${{ steps.ver.outputs.version }}.ipa Payload
 
       - uses: actions/upload-artifact@v4
         with:
           name: ios-ipa
-          path: ~/VsDnB.ipa
+          path: ~/ios-*.ipa
