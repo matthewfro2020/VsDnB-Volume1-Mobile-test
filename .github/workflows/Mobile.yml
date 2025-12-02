@@ -46,7 +46,7 @@ jobs:
           haxelib run hmm install
 
       - name: Install Polymod
-        run: haxelib git polymod https://github.com/larsiusprime/polymod.git hscript-rewrite
+        run: haxelib git polymod https://github.com/FunkinCrew/polymod-fork.git
 
       - name: Fix thx.core crash on iOS
         run: |
@@ -113,7 +113,7 @@ jobs:
           haxelib run hmm install
 
       - name: Install Polymod
-        run: haxelib git polymod https://github.com/larsiusprime/polymod.git hscript-rewrite
+        run: haxelib git polymod https://github.com/FunkinCrew/polymod-fork.git
 
       - name: Configure Android
         run: |
