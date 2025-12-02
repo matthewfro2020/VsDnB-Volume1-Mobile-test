@@ -31,7 +31,8 @@ jobs:
         uses: android-actions/setup-android@v3
         with:
           api-level: 33
-          ndk: 25.1.8937393
+          ndk: 21.4.7075529
+          cmake: 3.22.1
 
       - name: Install Haxelib Dependencies
         run: |
