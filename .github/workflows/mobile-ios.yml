@@ -32,6 +32,7 @@ jobs:
         with:
           haxe-version: 4.3.6
 
+      # ---------- HAXELIBS ----------
       - name: Install Haxelibs
         run: |
           haxelib install hxcpp
@@ -42,22 +43,32 @@ jobs:
           haxelib install flixel-addons
           haxelib install flxanimate
           haxelib install json2object
-          haxelib install thx.core
-          haxelib install polymod
           haxelib install hscript
           haxelib install hxvlc
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
           haxelib install hmm
           haxelib run hmm install
 
+      # ---------- REMOVE THX (DO NOT USE IT) ----------
       - name: Remove thx (fix iOS Nil conflict)
         run: |
-          haxelib remove thx.error   || true
+          haxelib remove thx.core || true
+          haxelib remove thx.error || true
           haxelib remove thx.languages || true
 
-      - name: Build iOS (nosign)
-        run: haxelib run lime build ios -nosign -D officialBuild -DMOBILE_BUILD
+      # ---------- INSTALL PATCHED POLYMOD ----------
+      # Removes all thx.* dependencies + Nil type
+      - name: Install patched polymod
+        run: |
+          haxelib remove polymod || true
+          haxelib git polymod https://github.com/growtopiaguru/polymod-ios-patch
 
+      # ---------- BUILD ----------
+      - name: Build iOS (nosign)
+        run: |
+          haxelib run lime build ios -nosign -D officialBuild -DMOBILE_BUILD
+
+      # ---------- PACKAGE ----------
       - name: Package IPA
         run: |
           cd export/release/ios/build/*-iphoneos
