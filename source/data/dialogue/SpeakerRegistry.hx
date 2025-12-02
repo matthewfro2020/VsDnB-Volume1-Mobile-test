@@ -66,10 +66,17 @@ class SpeakerRegistry extends BaseRegistry<Speaker, SpeakerData>
     // SCRIPTED SPEAKERS (for dialogue scripts)
     //------------------------------------------------------------------
 
-    function createScriptedEntry(clsName:String):Speaker
-    {
-        return ScriptedSpeaker.init(clsName, "generic");
-    }
+function createScriptedEntry(clsName:String):Speaker
+{
+    // Always construct a Speaker, not a FlxSprite
+    var data = new SpeakerData();
+    data.name = clsName;
+    data.globalOffsets = [0, 0];
+    data.expressions = [];
+    data.sounds = [];
+
+    return new Speaker(data);
+}
 
     function getScriptedClasses():Array<String>
     {
