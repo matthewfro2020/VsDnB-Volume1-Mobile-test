@@ -45,7 +45,6 @@ jobs:
 
       - name: Fix thx.core crash on iOS
         run: |
-          haxelib remove thx.core || true
           haxelib remove thx.error || true
           haxelib remove thx.languages || true
 
