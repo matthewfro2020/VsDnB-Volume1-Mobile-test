@@ -54,6 +54,12 @@ jobs:
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
           haxelib install hmm
           haxelib run hmm install
+          haxelib git thx_safe https://github.com/haxefoundation/thx.git
+          
+      - name: Remove Thx
+        run: |
+          haxelib remove thx.core
+          haxelib remove thx.semver
 
       - name: Configure Android
         run: |
