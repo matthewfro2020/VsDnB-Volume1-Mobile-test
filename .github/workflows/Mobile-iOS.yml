@@ -75,15 +75,6 @@ jobs:
         run: |
           mkdir -p ~/.hxcpp_config.xml
           cat <<EOF > ~/.hxcpp_config.xml
-<xml>
-  <section name="vars">
-    <var name="HXCPP_CPP11" value="1" />
-    <var name="HXCPP_CLANG" value="1" />
-    <var name="HXCPP_NO_RTTI" value="1" />
-    <var name="HXCPP_NO_NIL" value="1" />
-  </section>
-</xml>
-EOF
 
       # ==========================================
       # BUILD iOS (NO SIGNING)
