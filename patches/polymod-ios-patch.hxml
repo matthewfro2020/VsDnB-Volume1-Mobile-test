@@ -1,0 +1,2 @@
+# Disable problematic thx classes for iOS
+--macro patch.ThxIOSPatch.apply()
