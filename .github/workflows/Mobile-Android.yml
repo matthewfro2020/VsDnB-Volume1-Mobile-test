@@ -33,9 +33,11 @@ jobs:
           api-level: 33
           ndk: 25.1.8937393
 
-      - name: Install Haxelibs
+      - name: Install Haxelib Dependencies
         run: |
           haxelib install hxcpp
+          haxelib install thx.core
+          haxelib install thx.tuple
           haxelib install lime
           haxelib install openfl
           haxelib install flixel
@@ -43,8 +45,8 @@ jobs:
           haxelib install flixel-addons
           haxelib install flxanimate
           haxelib install json2object
-          haxelib install hscript
           haxelib git polymod https://github.com/T5mpler/polymod-dnb
+          haxelib install hscript
           haxelib install hxvlc
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
           haxelib install hmm
