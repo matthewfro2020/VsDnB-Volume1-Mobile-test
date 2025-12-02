@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xml>
+    <!-- Force HXCPP to stop adding -stdlib=libc++ -->
+    <section if="ios">
+        <set name="HXCPP_CLANG_NO_STDLIB" value="1" />
+        <compilerflag name="-fno-exceptions" />
+        <compilerflag value="-std=c++20" />
+        <compilerflag value="-Wno-deprecated-declarations" />
+        <compilerflag value="-Wno-unused-variable" />
+        <compilerflag value="-Wno-unused-function" />
+    </section>
+</xml>
