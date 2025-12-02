@@ -3,10 +3,6 @@ name: Mobile-iOS
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
-    tags:
-      - "v*.*.*"
   workflow_dispatch:
 
 jobs:
@@ -15,88 +11,37 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Determine Version
-        id: ver
-        shell: bash
-        run: |
-          if git describe --tags --exact-match >/dev/null 2>&1; then
-            echo "version=$(git describe --tags --exact-match)" >> $GITHUB_OUTPUT
-          else
-            echo "version=dev-$(date +'%Y%m%d-%H%M')" >> $GITHUB_OUTPUT
-          fi
 
       - uses: krdlab/setup-haxe@master
-        with:
-          haxe-version: 4.3.6
+        with: { haxe-version: 4.3.6 }
 
-      # ------------------------------------------
-      # INSTALL ALL LIBS + iOS PATCHES
-      # ------------------------------------------
-      - name: Install Haxelibs
+      - name: Install libs
         run: |
           haxelib install hxcpp
           haxelib install lime
           haxelib install openfl
           haxelib install flixel
-          haxelib install flixel-ui
-          haxelib install flixel-addons
-          haxelib install flxanimate
-          haxelib install json2object
+          haxelib install polymod
           haxelib install hscript
-          haxelib install hxvlc
-          haxelib install thx.core
-          haxelib git polymod https://github.com/T5mpler/polymod-dnb
-          haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
-          haxelib install hmm
-          haxelib run hmm install
+          haxelib install json2object
+          haxelib install flxanimate
+          haxelib git polymod https://github.com/growtopiaguru/polymod-ios-patch.git
 
-      # ==========================================
-      # POLYMOD iOS FIXES — required for IPA build
-      # ==========================================
-      - name: Patch Polymod for iOS
+      - name: Fix hxcpp config
         run: |
-          POLYMOD_DIR="$(haxelib path polymod | head -n 1)/polymod"
-          echo "Patching: $POLYMOD_DIR"
+          echo '<?xml version="1.0" encoding="utf-8"?><xml><section id="vars"><set name="HXCPP_CPP11" value="1"/><set name="HXCPP_NO_PCH" value="1"/><set name="HXCPP_NO_NIL" value="1"/><set name="HXCPP_CLANG" value="1"/></section></xml>' > ~/.hxcpp_config.xml
 
-          # Objective-C NIL Conflict
-          sed -i '' '1s;^;#if ios\n@:keep\n@:structAccess\n#end\n;' "$POLYMOD_DIR/Polymod.hx"
+      - name: Build iOS
+        run: haxelib run lime build ios -nosign -D officialBuild
 
-          # Remove deprecated ThxNil (causes iOS error)
-          sed -i '' 's/import thx\.Nil;//g' "$POLYMOD_DIR/format/JsonHelp.hx" || true
-          sed -i '' 's/ThxNil/Null<Dynamic>/g' "$POLYMOD_DIR/format/JsonHelp.hx" || true
-
-      # ==========================================
-      # HXCPP FIX (fixes: unknown option -stdlib)
-      # ==========================================
-      - name: Patch HXCPP for iOS
-        run: |
-          cat <<EOF > ~/.hxcpp_config.xml
-
-      # ==========================================
-      # BUILD iOS (NO SIGNING)
-      # ==========================================
-      - name: Build iOS (nosign)
-        run: haxelib run lime build ios -nosign -D officialBuild -DMOBILE_BUILD
-
-      # ==========================================
-      # PACKAGE IPA
-      # ==========================================
       - name: Package IPA
         run: |
           cd export/release/ios/build/*-iphoneos
           mkdir Payload
           mv *.app Payload/
-          zip -r ~/ios-${{ steps.ver.outputs.version }}.ipa Payload
-
-      - name: Collect IPA
-        run: |
-          mkdir build
-          mv ~/ios-${{ steps.ver.outputs.version }}.ipa build/
+          zip -r ~/VsDnB.ipa Payload
 
       - uses: actions/upload-artifact@v4
         with:
           name: ios-ipa
-          path: build/*
+          path: ~/VsDnB.ipa
