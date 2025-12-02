@@ -1,4 +1,9 @@
 package thx;
 
-// Completely override the original Nil to avoid Objective-C "Nil" conflict
-typedef Nil = ThxNil;
+// Fake minimal Nil that does NOT conflict with Obj-C "Nil"
+@:keep
+class Nil {
+    public static final nil = new Nil();
+    public function new() {}
+    public function toString() return "nil";
+}
